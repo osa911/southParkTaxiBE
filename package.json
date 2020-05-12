@@ -1,0 +1,14 @@
+{
+  "name": "southParkTaxi",
+  "description": "taxi week reporting",
+  "version": "0.0.1",
+  "scripts": {
+    "start": "yarn run cypress open"
+  },
+  "main": "index.js",
+  "author": "Yevhenii Osadchyi",
+  "license": "ISC",
+  "dependencies": {
+    "cypress": "^4.5.0"
+  }
+}
