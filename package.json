@@ -1,14 +1,32 @@
 {
-  "name": "southParkTaxi",
-  "description": "taxi week reporting",
-  "version": "0.0.1",
+  "name": "south-park-taxi-server",
+  "description": "taxi investor's cabinet",
+  "version": "0.1.0",
   "scripts": {
-    "start": "yarn run cypress open"
+    "start": "yarn run cypress open",
+    "server": "nodemon index.js",
+    "client": "yarn --cwd client start",
+    "client:install": "yarn --cwd client install",
+    "client:build": "yarn --cwd client build",
+    "dev": "cross-env NODE_ENV=development concurrently \"yarn server\" \"yarn client\""
   },
   "main": "index.js",
   "author": "Yevhenii Osadchyi",
   "license": "ISC",
   "dependencies": {
-    "cypress": "^4.5.0"
+    "bcryptjs": "^2.4.3",
+    "config": "^3.3.1",
+    "cors": "^2.8.5",
+    "cypress": "^4.5.0",
+    "express": "^4.17.1",
+    "express-graphql": "^0.9.0",
+    "graphql": "^15.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.15"
+  },
+  "devDependencies": {
+    "concurrently": "^5.2.0",
+    "cross-env": "^7.0.2",
+    "nodemon": "^2.0.4"
   }
 }
