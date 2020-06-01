@@ -1,2 +1,5 @@
 .idea/
 node_modules/
+.env
+queryes.graphql
+prisma/.env

@@ -1,6 +1,0 @@
-{
-  "port": 5000,
-  "jwtSecret": "osa south-park taxi",
-  "mongoUri": "mongodb+srv://osa911:southParkTaxiDBMongo@cluster0-7d8hb.azure.mongodb.net/test?retryWrites=true&w=majority\n",
-  "baseUrl": "http://localhost:5000"
-}

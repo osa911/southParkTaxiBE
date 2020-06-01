@@ -1,32 +1,33 @@
 {
   "name": "south-park-taxi-server",
   "description": "taxi investor's cabinet",
-  "version": "0.1.0",
+  "version": "0.1.1",
+  "private": true,
   "scripts": {
     "start": "yarn run cypress open",
     "server": "nodemon index.js",
-    "client": "yarn --cwd client start",
-    "client:install": "yarn --cwd client install",
-    "client:build": "yarn --cwd client build",
-    "dev": "cross-env NODE_ENV=development concurrently \"yarn server\" \"yarn client\""
+    "build": "node index.js",
+    "prisma": "npx prisma generate",
+    "prismai": "npx prisma introspect",
+    "prismam": "npx prisma migrate save --name init --experimental && npx prisma migrate up --experimental"
   },
   "main": "index.js",
   "author": "Yevhenii Osadchyi",
   "license": "ISC",
   "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "config": "^3.3.1",
+    "@prisma/client": "^2.0.0-beta.5",
+    "apollo-link-error": "^1.1.13",
+    "apollo-server-express": "^2.13.1",
+    "bcrypt": "^4.0.1",
     "cors": "^2.8.5",
     "cypress": "^4.5.0",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "express-graphql": "^0.9.0",
     "graphql": "^15.0.0",
-    "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.9.15"
+    "jsonwebtoken": "^8.5.1"
   },
   "devDependencies": {
-    "concurrently": "^5.2.0",
-    "cross-env": "^7.0.2",
+    "@prisma/cli": "^2.0.0-beta.5",
     "nodemon": "^2.0.4"
   }
 }
