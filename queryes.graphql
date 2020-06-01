@@ -1,0 +1,34 @@
+query getUsersList {
+	getUsersList{
+		id
+		name
+		password
+		email
+		phone
+		role
+	}
+}
+#"Authorization": ""
+mutation loginUser {
+	loginUser(password: "123123", email: "osa@test.com")
+}
+
+mutation createUser {
+	createUser(name: "osa1", password: "123123", email: "osa@test.com")
+}
+
+mutation updateUser($id: ID!, $name: String!, $password: String!, $email: String!) {
+	updateUser(id: $id, name: $name, password: $password, email: $email) {
+		name
+		id
+		password
+		email
+	}
+}
+
+mutation deleteUser($id: ID) {
+	deleteUser(id: $id) {
+		id
+	}
+}
+

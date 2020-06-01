@@ -33,9 +33,13 @@ const server = new ApolloServer({
   },
 })
 
-server.applyMiddleware({ app, path: '/api' })
+
+if (process.env.NODE_ENV !== 'production') {
+  server.applyMiddleware({ app, path: '/api' })
+}
 
 if (process.env.NODE_ENV === 'production') {
+  server.applyMiddleware({ app, path: '/.netlify/functions/api' })
   app.use('/', express.static(path.join(__dirname, 'client')))
 
   app.get('*', (req, res) => {
