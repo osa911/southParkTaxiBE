@@ -1,12 +1,13 @@
 const { ApolloServer } = require('apollo-server-express')
 const { PrismaClient } = require('@prisma/client')
+const serverless = require('serverless-http')
 const express = require('express')
 const path = require('path')
 const cors = require('cors')
 require('dotenv').config()
 
-const schema = require('./src/schema')
-const { isAuthenticated } = require('./src/utils/auth')
+const schema = require('./schema')
+const { isAuthenticated } = require('./utils/auth')
 
 const app = express()
 const prisma = new PrismaClient()
@@ -47,12 +48,9 @@ if (process.env.NODE_ENV === 'production') {
   })
 }
 
-const PORT = process.env.SERVER_PORT || 5000
-
-async function start () {
+function start() {
   try {
     prisma.connect()
-    app.listen(PORT, () => console.log(`🚀 🚀 🚀 Server has been started on port ${PORT} ❤️ ❤️ ❤️ `))
   } catch (e) {
     console.log('Server Error', e.message)
     prisma.disconnect()
@@ -61,3 +59,6 @@ async function start () {
 }
 
 start()
+
+module.exports = app
+module.exports.handler = serverless(app)
