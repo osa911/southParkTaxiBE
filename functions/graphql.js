@@ -14,11 +14,4 @@ try {
   process.exit(1)
 }
 
-exports.handler = server.createHandler({
-  cors: {
-    origin: '*',
-  },
-  onHealthCheck(req) {
-    console.log('onHealthCheck_req> ', req)
-  },
-})
+exports.handler = server.createHandler()

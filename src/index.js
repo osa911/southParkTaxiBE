@@ -58,6 +58,17 @@ const appolloServerConfig = {
 }
 
 function createLambdaServer() {
+  try {
+    prisma.connect()
+    console.log('DB CONNECTED')
+    prisma.user.findMany().then((res) => {
+      console.log('USERS_LIST: ', res)
+    })
+  } catch (e) {
+    console.log('Server Error', e.message)
+    prisma.disconnect()
+    process.exit(1)
+  }
   return new ApolloServerLambda(appolloServerConfig)
 }
 
@@ -65,7 +76,7 @@ function createLocalServer() {
   return new ApolloServer(appolloServerConfig)
 }
 
-module.exports = { createLambdaServer, createLocalServer, prisma }
+exports.handler = createLambdaServer().createHandler()
+module.exports = { createLocalServer, prisma }
 
 // module.exports = app
-// module.exports.handler = serverless(app)
