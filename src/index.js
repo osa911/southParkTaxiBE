@@ -37,9 +37,9 @@ const prisma = new PrismaClient()
 // start()
 const appolloServerConfig = {
   schema,
-  // debug: false,
+  debug: true,
   playground: true,
-  introspection: true,
+  // introspection: true,
   engine: {
     rewriteError: (error) => ({
       message: error.message,
