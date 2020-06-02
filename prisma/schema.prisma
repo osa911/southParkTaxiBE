@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Car {
+  createdAt DateTime @default(now())
+  govNumber String   @unique
+  id        String   @default(dbgenerated()) @id
+  mileage   Float?
+  ownerId   String
+  price     Float?
+  title     String
+  user      User     @relation(fields: [ownerId], references: [id])
+  report    Report[]
+}
+
+model Report {
+  createdAt            DateTime @default(now())
+  exchangeRate         Float?
+  govNumber            String
+  govNumberId          String
+  id                   String   @default(dbgenerated()) @id
+  income               Float?
+  incomeBranding       Float?
+  managementFee        Float?
+  managementFeePercent Float?
+  mileage              Float?
+  netProfit            Float?
+  netProfitUSD         Float?
+  serviceFee           Float?
+  title                String?
+  totalIncome          Float?
+  trackerFee           Float?
+  week                 String?
+  year                 String?
+  car                  Car      @relation(fields: [govNumberId], references: [id])
+}
+
+model User {
+  createdAt DateTime   @default(now())
+  email     String     @unique
+  id        String     @default(dbgenerated()) @id
+  name      String?
+  password  String
+  phone     String?
+  role      role_enum? @default(INVESTOR)
+  car       Car[]
+}
+
+enum role_enum {
+  ADMIN
+  INVESTOR
+}
