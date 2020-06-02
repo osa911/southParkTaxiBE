@@ -3,7 +3,6 @@ const { AuthenticationError } = require('apollo-server-express')
 const { NOT_AUTHENTICATED } = require('../constants/messages')
 
 function isAuthenticated(request) {
-  console.log('isAuthenticated request> ', request)
   if (request) {
     const Authorization = request.headers.authorization
     if (Authorization) {

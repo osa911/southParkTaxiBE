@@ -40,7 +40,7 @@ const getUserById = {
 const getUsersList = {
   type: new GraphQLList(UserType),
   resolve(parent, args, { db, auth }) {
-    checkIsAuth(auth)
+    // checkIsAuth(auth)
     return db.user.findMany()
   },
 }
