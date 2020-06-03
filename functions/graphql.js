@@ -14,4 +14,8 @@ try {
   process.exit(1)
 }
 
-exports.handler = server.createHandler()
+exports.handler = server.createHandler({
+  cors: {
+    origin: process.env.FE_HOST,
+  },
+})
