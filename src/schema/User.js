@@ -5,29 +5,10 @@ const { ApolloError } = require('apollo-server-express')
 
 const { checkIsAuth } = require('../utils/auth')
 const messages = require('../constants/messages')
+const { UserType } = require('./Types')
 
 const { WRONG_AUTH_CREDENTIAL } = messages
-const { GraphQLObjectType, GraphQLList, GraphQLString, GraphQLID, GraphQLNonNull, GraphQLEnumType, GraphQLError } = graphql
-
-const UserType = new GraphQLObjectType({
-  name: 'User',
-  fields: () => ({
-    id: { type: GraphQLID },
-    name: { type: new GraphQLNonNull(GraphQLString) },
-    password: { type: new GraphQLNonNull(GraphQLString) },
-    email: { type: new GraphQLNonNull(GraphQLString) },
-    phone: { type: GraphQLString },
-    role: {
-      type: new GraphQLEnumType({
-        name: 'role',
-        values: {
-          ADMIN: { value: 'ADMIN' },
-          INVESTOR: { value: 'INVESTOR' },
-        },
-      }),
-    },
-  }),
-})
+const { GraphQLList, GraphQLString, GraphQLID, GraphQLNonNull, GraphQLError } = graphql
 
 const getUserById = {
   type: UserType,
@@ -82,9 +63,9 @@ const updateUser = {
   type: UserType,
   args: {
     id: { type: GraphQLID },
-    name: { type: new GraphQLNonNull(GraphQLString) },
-    password: { type: new GraphQLNonNull(GraphQLString) },
-    email: { type: new GraphQLNonNull(GraphQLString) },
+    name: { type: GraphQLNonNull(GraphQLString) },
+    password: { type: GraphQLNonNull(GraphQLString) },
+    email: { type: GraphQLNonNull(GraphQLString) },
   },
   resolve(parent, { id, name, password, email }, { db, auth }) {
     checkIsAuth(auth)
@@ -97,6 +78,7 @@ const updateUser = {
   },
 }
 
+// TODO: add cascading cars deleting
 const deleteUser = {
   type: UserType,
   args: { id: { type: GraphQLID } },
@@ -133,12 +115,12 @@ const loginUser = {
   },
 }
 
-const userQuery = {
+const Query = {
   getUserById,
   getUsersList,
 }
 
-const userMutation = {
+const Mutation = {
   createUser,
   updateUser,
   deleteUser,
@@ -146,6 +128,6 @@ const userMutation = {
 }
 
 module.exports = {
-  userQuery,
-  userMutation,
+  Query,
+  Mutation,
 }

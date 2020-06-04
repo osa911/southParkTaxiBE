@@ -49,7 +49,7 @@ model User {
   password  String
   phone     String?
   role      role_enum? @default(INVESTOR)
-  car       Car[]
+  cars      Car[]
 }
 
 enum role_enum {

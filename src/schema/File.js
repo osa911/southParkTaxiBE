@@ -1,25 +1,11 @@
 const graphql = require('graphql')
 const { GraphQLUpload } = require('apollo-server')
-const { checkIsAuth } = require('../utils/auth')
 const Excel = require('exceljs/lib/exceljs.nodejs.js')
 
-const { GraphQLObjectType, GraphQLList, GraphQLString, GraphQLNonNull } = graphql
+const { checkIsAuth } = require('../utils/auth')
+const { SheetType } = require('./Types')
 
-const ReportRowType = new GraphQLObjectType({
-  name: 'ReportRow',
-  fields: {
-    address: { type: GraphQLString, description: 'Cell address' },
-    value: { type: GraphQLString, description: 'Cell value.' },
-  },
-})
-
-const SheetType = new GraphQLObjectType({
-  name: 'SheetType',
-  fields: {
-    name: { type: GraphQLNonNull(GraphQLString), description: 'Sheets name' },
-    rows: { type: GraphQLList(GraphQLList(ReportRowType)), description: 'Rows list.' },
-  },
-})
+const { GraphQLList, GraphQLNonNull } = graphql
 
 const singleUploadStream = {
   description: 'Upload file for reading',
@@ -60,10 +46,10 @@ const singleUploadStream = {
   },
 }
 
-const fileMutation = {
+const Mutation = {
   singleUploadStream,
 }
 
 module.exports = {
-  fileMutation,
+  Mutation,
 }
