@@ -30,16 +30,15 @@ const prisma = new PrismaClient()
 //   })
 // }
 
-// function start() {
-//
-// }
-//
-// start()
 const appolloServerConfig = {
   schema,
   debug: true,
   playground: true,
   // introspection: true,
+  uploads: {
+    maxFiles: 1,
+    maxFileSize: 10000000, // 10 MB
+  },
   engine: {
     rewriteError: (error) => ({
       message: error.message,
@@ -62,7 +61,12 @@ function createLambdaServer() {
 }
 
 function createLocalServer() {
-  return new ApolloServer(appolloServerConfig)
+  return new ApolloServer({
+    ...appolloServerConfig,
+    cors: {
+      origin: '*',
+    },
+  })
 }
 
 // exports.handler = createLambdaServer().createHandler()

@@ -38,7 +38,7 @@ const getUserById = {
 }
 
 const getUsersList = {
-  type: new GraphQLList(UserType),
+  type: GraphQLList(UserType),
   resolve(parent, args, { db, auth }) {
     // checkIsAuth(auth)
     return db.user.findMany()
@@ -60,27 +60,21 @@ class ValidationError extends GraphQLError {
 }
 
 const createUser = {
-  type: GraphQLString,
+  type: UserType,
   args: {
-    name: { type: new GraphQLNonNull(GraphQLString) },
-    password: { type: new GraphQLNonNull(GraphQLString) },
-    email: { type: new GraphQLNonNull(GraphQLString) },
+    name: { type: GraphQLNonNull(GraphQLString) },
+    password: { type: GraphQLNonNull(GraphQLString) },
+    email: { type: GraphQLNonNull(GraphQLString) },
   },
   async resolve(parent, { name, password, email }, { db, auth }) {
-    // checkIsAuth(auth)
-    const user = await db.user.create({
+    checkIsAuth(auth)
+    return await db.user.create({
       data: {
         name,
         email,
         password: await bcrypt.hash(password, 10),
       },
     })
-
-    return jsonwebtoken.sign(
-      { id: user.id, email: user.email },
-      process.env.JWT_SECRET,
-      { expiresIn: '1d' },
-    )
   },
 }
 
@@ -115,8 +109,8 @@ const deleteUser = {
 const loginUser = {
   type: GraphQLString,
   args: {
-    password: { type: new GraphQLNonNull(GraphQLString) },
-    email: { type: new GraphQLNonNull(GraphQLString) },
+    password: { type: GraphQLNonNull(GraphQLString) },
+    email: { type: GraphQLNonNull(GraphQLString) },
   },
   async resolve(parent, { email, password }, { db }) {
     const user = await db.user.findOne({ where: { email } })
