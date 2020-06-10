@@ -2,6 +2,14 @@ const graphql = require('graphql')
 
 const { GraphQLObjectType, GraphQLFloat, GraphQLList, GraphQLString, GraphQLID, GraphQLNonNull, GraphQLEnumType, GraphQLError } = graphql
 
+const RoleEnumType = new GraphQLEnumType({
+  name: 'role',
+  values: {
+    ADMIN: { value: 'ADMIN' },
+    INVESTOR: { value: 'INVESTOR' },
+  },
+})
+
 const UserType = new GraphQLObjectType({
   name: 'User',
   fields: () => ({
@@ -18,13 +26,7 @@ const UserType = new GraphQLObjectType({
       },
     },
     role: {
-      type: new GraphQLEnumType({
-        name: 'role',
-        values: {
-          ADMIN: { value: 'ADMIN' },
-          INVESTOR: { value: 'INVESTOR' },
-        },
-      }),
+      type: RoleEnumType,
     },
   }),
 })
@@ -68,4 +70,5 @@ module.exports = {
   UserType,
   CarType,
   SheetType,
+  RoleEnumType,
 }
