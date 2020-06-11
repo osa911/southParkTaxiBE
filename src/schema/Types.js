@@ -1,6 +1,14 @@
 const graphql = require('graphql')
 
-const { GraphQLObjectType, GraphQLFloat, GraphQLList, GraphQLString, GraphQLID, GraphQLNonNull, GraphQLEnumType, GraphQLError } = graphql
+const {
+  GraphQLObjectType,
+  GraphQLFloat,
+  GraphQLList,
+  GraphQLString,
+  GraphQLID,
+  GraphQLNonNull,
+  GraphQLEnumType,
+} = graphql
 
 const RoleEnumType = new GraphQLEnumType({
   name: 'role',

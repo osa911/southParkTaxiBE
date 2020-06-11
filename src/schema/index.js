@@ -23,7 +23,7 @@ const Query = new GraphQLObjectType({
   fields: {
     ...userQuery,
     ...carQuery,
-  }
+  },
 })
 
 module.exports = new GraphQLSchema({

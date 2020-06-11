@@ -125,14 +125,11 @@ const loginUser = {
     }
 
     const { id, name, role } = user
-    return jsonwebtoken.sign(
-      { id, email: user.email, name, role },
-      process.env.JWT_SECRET,
-      { expiresIn: '100y' },
-    )
+    return jsonwebtoken.sign({ id, email: user.email, name, role }, process.env.JWT_SECRET, {
+      expiresIn: '100y',
+    })
   },
 }
-
 
 const Query = {
   getUserById,

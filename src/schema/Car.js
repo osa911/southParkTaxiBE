@@ -72,7 +72,6 @@ const deleteCar = {
   },
 }
 
-
 const Query = {
   getCarById,
   getCarsList,
