@@ -27,10 +27,10 @@ const appolloServerConfig = {
     }),
   },
   validationRules: [depthLimit(5)],
-  context: ({ req, ...rest }) => {
+  context: ({ req, event, ...rest }) => {
     console.log('req> ', req)
     console.log('rest> ', rest)
-    const auth = isAuthenticated(req)
+    const auth = isAuthenticated(req || event)
     return {
       auth,
       db: prisma,
