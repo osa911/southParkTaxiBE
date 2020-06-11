@@ -22,7 +22,7 @@
     "@babel/core": "^7.10.2",
     "@babel/node": "^7.10.1",
     "@babel/preset-env": "^7.10.2",
-    "@prisma/client": "^2.0.0-beta.5",
+    "@prisma/client": "^2.0.0",
     "apollo-link-error": "^1.1.13",
     "apollo-server": "^2.14.1",
     "apollo-server-lambda": "^2.14.1",
@@ -37,7 +37,7 @@
     "node-fetch": "^2.6.0"
   },
   "devDependencies": {
-    "@prisma/cli": "^2.0.0-beta.5",
+    "@prisma/cli": "^2.0.0",
     "eslint": "^7.2.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.3",
