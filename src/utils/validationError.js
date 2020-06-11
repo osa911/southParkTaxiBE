@@ -1,4 +1,4 @@
-import { GraphQLError } from "graphql";
+import { GraphQLError } from 'graphql'
 
 export class ValidationError extends GraphQLError {
   constructor(errors) {
@@ -7,7 +7,7 @@ export class ValidationError extends GraphQLError {
       if (Object.prototype.hasOwnProperty.call(result, error.key)) {
         result[error.key].push(error.message)
       } else {
-        result[error.key] = [ error.message ];
+        result[error.key] = [error.message]
       }
       return result
     }, {})

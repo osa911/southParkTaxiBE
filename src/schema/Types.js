@@ -5,8 +5,8 @@ import {
   GraphQLList,
   GraphQLNonNull,
   GraphQLObjectType,
-  GraphQLString
-} from "graphql";
+  GraphQLString,
+} from 'graphql'
 
 export const RoleEnumType = new GraphQLEnumType({
   name: 'role',
@@ -28,8 +28,8 @@ export const UserType = new GraphQLObjectType({
       type: GraphQLList(CarType),
       description: "User's cars.",
       resolve({ id }, args, { db }) {
-        return db.car.findMany({ where: { ownerId: id } });
-      }
+        return db.car.findMany({ where: { ownerId: id } })
+      },
     },
     role: {
       type: RoleEnumType,

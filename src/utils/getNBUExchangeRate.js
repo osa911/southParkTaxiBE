@@ -1,4 +1,4 @@
-import fetch from "node-fetch";
+import fetch from 'node-fetch'
 
 export const getNBUExchangeRate = async (date) => {
   const workDate = new Date(date)
