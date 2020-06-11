@@ -81,8 +81,8 @@ export const ReportType = new GraphQLObjectType({
     title: { type: GraphQLString },
     totalIncome: { type: GraphQLFloat },
     trackerFee: { type: GraphQLFloat },
-    week: { type: GraphQLInt },
-    year: { type: GraphQLInt },
+    week: { type: GraphQLFloat },
+    year: { type: GraphQLFloat },
     car: {
       type: CarType,
       resolve({ govNumberId }, args, { db }) {
