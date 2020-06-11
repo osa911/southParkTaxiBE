@@ -1,8 +1,6 @@
-const graphql = require('graphql')
-const { CarType } = require('./Types')
-const { checkIsAuth } = require('../utils/auth')
-
-const { GraphQLID, GraphQLList, GraphQLFloat, GraphQLString, GraphQLNonNull } = graphql
+import { GraphQLFloat, GraphQLID, GraphQLList, GraphQLNonNull, GraphQLString } from 'graphql'
+import { CarType } from './Types'
+import { checkIsAuth } from '../utils/auth'
 
 const getCarById = {
   type: CarType,
@@ -72,20 +70,13 @@ const deleteCar = {
   },
 }
 
-
-const Query = {
+export const Query = {
   getCarById,
   getCarsList,
 }
 
-const Mutation = {
+export const Mutation = {
   createCar,
   updateCar,
   deleteCar,
-}
-
-module.exports = {
-  Query,
-  Mutation,
-  CarType,
 }

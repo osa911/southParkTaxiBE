@@ -5,5 +5,5 @@
   ],
   "ext": ".js",
   "ignore": [],
-  "exec": "node ./localServer.js"
+  "exec": "npx babel-node ./localServer.js"
 }

@@ -6,7 +6,10 @@
   "scripts": {
     "start": "yarn run cypress open",
     "server": "nodemon",
-    "bundle": "cpx \"src/**/*\" \"functions/bundle\"",
+    "build": "rm -rf dist && NODE_ENV=production babel src --out-dir dist",
+    "bundle": "cpx \"dist/**/*\" \"functions/bundle\"",
+    "pretty": "prettier --check 'src/**/*.{js,jsx}'",
+    "pretty:fix": "prettier --write 'src/**/*.{js,jsx}'",
     "prisma": "npx prisma generate",
     "prismai": "npx prisma introspect",
     "prismam": "npx prisma migrate save --name init --experimental && npx prisma migrate up --experimental"
@@ -15,11 +18,14 @@
   "author": "Yevhenii Osadchyi",
   "license": "ISC",
   "dependencies": {
+    "@babel/cli": "^7.10.1",
+    "@babel/core": "^7.10.2",
+    "@babel/node": "^7.10.1",
+    "@babel/preset-env": "^7.10.2",
     "@prisma/client": "^2.0.0-beta.5",
     "apollo-link-error": "^1.1.13",
     "apollo-server": "^2.14.1",
     "apollo-server-lambda": "^2.14.1",
-    "aws-sdk": "^2.687.0",
     "bcrypt": "^4.0.1",
     "cpx": "^1.5.0",
     "cypress": "^4.5.0",
@@ -27,10 +33,14 @@
     "exceljs": "^4.0.0",
     "graphql": "^15.0.0",
     "graphql-depth-limit": "^1.1.0",
-    "jsonwebtoken": "^8.5.1"
+    "jsonwebtoken": "^8.5.1",
+    "node-fetch": "^2.6.0"
   },
   "devDependencies": {
     "@prisma/cli": "^2.0.0-beta.5",
-    "nodemon": "^2.0.4"
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.3",
+    "nodemon": "^2.0.4",
+    "prettier": "^2.0.5"
   }
 }

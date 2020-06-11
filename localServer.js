@@ -1,6 +1,5 @@
 'use strict'
-
-const { createLocalServer, prisma } = require('./src/')
+import { createLocalServer, prisma } from './src'
 
 const server = createLocalServer()
 const PORT = process.env.SERVER_PORT || 5000

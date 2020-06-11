@@ -1,8 +1,8 @@
-const jwt = require('jsonwebtoken')
-const { AuthenticationError } = require('apollo-server-express')
-const { NOT_AUTHENTICATED } = require('../constants/messages')
+import jwt from 'jsonwebtoken'
+import { AuthenticationError } from 'apollo-server'
+import { NOT_AUTHENTICATED } from '../constants/messages'
 
-function isAuthenticated(request) {
+export const isAuthenticated = (request) => {
   if (request) {
     const Authorization = request.headers.authorization
     if (Authorization) {
@@ -19,13 +19,8 @@ function isAuthenticated(request) {
   return { isOk: false }
 }
 
-const checkIsAuth = (auth) => {
+export const checkIsAuth = (auth) => {
   if (!auth.isOk) {
     throw new AuthenticationError(NOT_AUTHENTICATED)
   }
-}
-
-module.exports = {
-  isAuthenticated,
-  checkIsAuth,
 }

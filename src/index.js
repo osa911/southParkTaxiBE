@@ -1,13 +1,13 @@
-const { ApolloServer } = require('apollo-server')
-const { ApolloServer: ApolloServerLambda } = require('apollo-server-lambda')
-const { PrismaClient } = require('@prisma/client')
-const depthLimit = require('graphql-depth-limit')
-require('dotenv').config()
+import { ApolloServer } from 'apollo-server'
+import { ApolloServer as ApolloServerLambda } from 'apollo-server-lambda'
+import { PrismaClient } from '@prisma/client'
+import depthLimit from 'graphql-depth-limit'
+import { config } from 'dotenv'
+import { isAuthenticated } from './utils/auth'
+import schema from './schema'
 
-const schema = require('./schema')
-const { isAuthenticated } = require('./utils/auth')
-
-const prisma = new PrismaClient()
+config()
+export const prisma = new PrismaClient()
 
 const appolloServerConfig = {
   schema,
@@ -36,17 +36,12 @@ const appolloServerConfig = {
   },
 }
 
-function createLambdaServer() {
-  return new ApolloServerLambda(appolloServerConfig)
-}
+export const createLambdaServer = () => new ApolloServerLambda(appolloServerConfig)
 
-function createLocalServer() {
-  return new ApolloServer({
+export const createLocalServer = () =>
+  new ApolloServer({
     ...appolloServerConfig,
     cors: {
       origin: '*',
     },
   })
-}
-
-module.exports = { createLambdaServer, createLocalServer, prisma }
