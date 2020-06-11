@@ -41,7 +41,7 @@ const createUser = {
     role: { type: RoleEnumType },
   },
   async resolve(parent, { name, password, email, role, phone }, { db, auth }) {
-    // checkIsAuth(auth)
+    checkIsAuth(auth)
     return await db.user.create({
       data: {
         name,
