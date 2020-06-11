@@ -11,7 +11,7 @@ export const prisma = new PrismaClient()
 
 const appolloServerConfig = {
   schema,
-  debug: true,
+  debug: process.env.NODE_ENV === 'development',
   playground: true,
   // introspection: true,
   uploads: {
