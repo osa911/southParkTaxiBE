@@ -20,6 +20,7 @@ export const isAuthenticated = (request) => {
 }
 
 export const checkIsAuth = (auth) => {
+  console.log('auth> ', auth)
   if (!auth.isOk) {
     throw new AuthenticationError(NOT_AUTHENTICATED)
   }
