@@ -1,24 +1,37 @@
-const graphql = require('graphql')
-const userSchema = require('./User')
+'use strict'
 
-const { GraphQLSchema, GraphQLObjectType } = graphql
-const { userQuery, userMutation } = userSchema
+Object.defineProperty(exports, '__esModule', {
+  value: true,
+})
+exports.default = void 0
 
-const Mutation = new GraphQLObjectType({
+var _graphql = require('graphql')
+
+var _File = require('./File')
+
+var _User = require('./User')
+
+var _Car = require('./Car')
+
+const Mutation = new _graphql.GraphQLObjectType({
   name: 'Mutation',
   fields: {
-    ...userMutation,
+    ..._User.Mutation,
+    ..._File.Mutation,
+    ..._Car.Mutation,
   },
 })
-
-const Query = new GraphQLObjectType({
+const Query = new _graphql.GraphQLObjectType({
   name: 'Query',
   fields: {
-    ...userQuery,
+    ..._User.Query,
+    ..._Car.Query,
   },
 })
 
-module.exports = new GraphQLSchema({
+var _default = new _graphql.GraphQLSchema({
   query: Query,
   mutation: Mutation,
 })
+
+exports.default = _default

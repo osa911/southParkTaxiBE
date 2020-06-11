@@ -1,16 +1,14 @@
-const graphql = require('graphql')
-
-const {
-  GraphQLObjectType,
-  GraphQLFloat,
-  GraphQLList,
-  GraphQLString,
-  GraphQLID,
-  GraphQLNonNull,
+import {
   GraphQLEnumType,
-} = graphql
+  GraphQLFloat,
+  GraphQLID,
+  GraphQLList,
+  GraphQLNonNull,
+  GraphQLObjectType,
+  GraphQLString,
+} from 'graphql'
 
-const RoleEnumType = new GraphQLEnumType({
+export const RoleEnumType = new GraphQLEnumType({
   name: 'role',
   values: {
     ADMIN: { value: 'ADMIN' },
@@ -18,7 +16,7 @@ const RoleEnumType = new GraphQLEnumType({
   },
 })
 
-const UserType = new GraphQLObjectType({
+export const UserType = new GraphQLObjectType({
   name: 'User',
   fields: () => ({
     id: { type: GraphQLID },
@@ -39,7 +37,7 @@ const UserType = new GraphQLObjectType({
   }),
 })
 
-const CarType = new GraphQLObjectType({
+export const CarType = new GraphQLObjectType({
   name: 'Car',
   fields: () => ({
     id: { type: GraphQLNonNull(GraphQLString), description: 'Car id' },
@@ -66,17 +64,10 @@ const ReportRowType = new GraphQLObjectType({
   },
 })
 
-const SheetType = new GraphQLObjectType({
+export const SheetType = new GraphQLObjectType({
   name: 'SheetType',
   fields: {
     name: { type: GraphQLNonNull(GraphQLString), description: 'Sheets name' },
     rows: { type: GraphQLList(GraphQLList(ReportRowType)), description: 'Rows list.' },
   },
 })
-
-module.exports = {
-  UserType,
-  CarType,
-  SheetType,
-  RoleEnumType,
-}

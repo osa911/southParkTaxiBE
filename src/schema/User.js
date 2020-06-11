@@ -1,14 +1,11 @@
-const graphql = require('graphql')
-const bcrypt = require('bcrypt')
-const jsonwebtoken = require('jsonwebtoken')
-const { ApolloError } = require('apollo-server-express')
-
-const { checkIsAuth } = require('../utils/auth')
-const messages = require('../constants/messages')
-const { UserType, RoleEnumType } = require('./Types')
-
-const { WRONG_AUTH_CREDENTIAL } = messages
-const { GraphQLList, GraphQLString, GraphQLID, GraphQLNonNull, GraphQLError } = graphql
+import { GraphQLID, GraphQLList, GraphQLNonNull, GraphQLString } from 'graphql'
+import bCrypt from 'bcrypt'
+import JsonWebToken from 'jsonwebtoken'
+import { ApolloError } from 'apollo-server'
+import { WRONG_AUTH_CREDENTIAL } from '../constants/messages'
+import { checkIsAuth } from '../utils/auth'
+import { ValidationError } from '../utils/validationError'
+import { RoleEnumType, UserType } from './Types'
 
 const getUserById = {
   type: UserType,
@@ -34,20 +31,6 @@ const getUsersList = {
   },
 }
 
-class ValidationError extends GraphQLError {
-  constructor(errors) {
-    super('The request is invalid.')
-    this.state = errors.reduce((result, error) => {
-      if (Object.prototype.hasOwnProperty.call(result, error.key)) {
-        result[error.key].push(error.message)
-      } else {
-        result[error.key] = [ error.message ]
-      }
-      return result
-    }, {})
-  }
-}
-
 const createUser = {
   type: UserType,
   args: {
@@ -65,7 +48,7 @@ const createUser = {
         email,
         role,
         phone,
-        password: await bcrypt.hash(password, 10),
+        password: await bCrypt.hash(password, 10),
       },
     })
   },
@@ -90,7 +73,7 @@ const updateUser = {
         email,
         role,
         phone,
-        password: await bcrypt.hash(password, 10),
+        password: await bCrypt.hash(password, 10),
       },
     })
   },
@@ -118,33 +101,28 @@ const loginUser = {
       return new ValidationError(WRONG_AUTH_CREDENTIAL)
     }
 
-    const valid = await bcrypt.compare(password, user.password)
+    const valid = await bCrypt.compare(password, user.password)
 
     if (!valid) {
       return new ApolloError(WRONG_AUTH_CREDENTIAL)
     }
 
     const { id, name, role } = user
-    return jsonwebtoken.sign({ id, email: user.email, name, role }, process.env.JWT_SECRET, {
+    return JsonWebToken.sign({ id, email: user.email, name, role }, process.env.JWT_SECRET, {
       expiresIn: '100y',
     })
   },
 }
 
-const Query = {
+export const Query = {
   getUserById,
   me,
   getUsersList,
 }
 
-const Mutation = {
+export const Mutation = {
   createUser,
   updateUser,
   deleteUser,
   loginUser,
-}
-
-module.exports = {
-  Query,
-  Mutation,
 }

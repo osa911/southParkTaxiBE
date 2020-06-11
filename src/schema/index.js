@@ -1,13 +1,7 @@
-const graphql = require('graphql')
-const userSchema = require('./User')
-const carSchema = require('./Car')
-const fileSchema = require('./File')
-
-const { GraphQLSchema, GraphQLObjectType } = graphql
-
-const { Query: userQuery, Mutation: userMutation } = userSchema
-const { Mutation: fileMutation } = fileSchema
-const { Mutation: carMutation, Query: carQuery } = carSchema
+import { GraphQLObjectType, GraphQLSchema } from 'graphql'
+import { Mutation as fileMutation } from './File'
+import { Mutation as userMutation, Query as userQuery } from './User'
+import { Mutation as carMutation, Query as carQuery } from './Car'
 
 const Mutation = new GraphQLObjectType({
   name: 'Mutation',
@@ -26,7 +20,7 @@ const Query = new GraphQLObjectType({
   },
 })
 
-module.exports = new GraphQLSchema({
+export default new GraphQLSchema({
   query: Query,
   mutation: Mutation,
 })

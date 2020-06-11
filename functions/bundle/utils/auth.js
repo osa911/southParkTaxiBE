@@ -1,31 +1,51 @@
-const jwt = require('jsonwebtoken')
-const { AuthenticationError } = require('apollo-server-express')
-const { NOT_AUTHENTICATED } = require('../constants/messages')
+'use strict'
 
-function isAuthenticated(request) {
+Object.defineProperty(exports, '__esModule', {
+  value: true,
+})
+exports.checkIsAuth = exports.isAuthenticated = void 0
+
+var _jsonwebtoken = _interopRequireDefault(require('jsonwebtoken'))
+
+var _apolloServer = require('apollo-server')
+
+var _messages = require('../constants/messages')
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj }
+}
+
+const isAuthenticated = request => {
   if (request) {
     const Authorization = request.headers.authorization
+
     if (Authorization) {
       const token = Authorization.replace('Bearer ', '')
+
       try {
-        const user = jwt.verify(token, process.env.JWT_SECRET)
-        return { isOk: true, user }
+        const user = _jsonwebtoken.default.verify(token, process.env.JWT_SECRET)
+
+        return {
+          isOk: true,
+          user,
+        }
       } catch (e) {
-        throw new AuthenticationError(e.message)
+        throw new _apolloServer.AuthenticationError(e.message)
       }
     }
   }
 
-  return { isOk: false }
-}
-
-const checkIsAuth = (auth) => {
-  if (!auth.isOk) {
-    throw new AuthenticationError(NOT_AUTHENTICATED)
+  return {
+    isOk: false,
   }
 }
 
-module.exports = {
-  isAuthenticated,
-  checkIsAuth,
+exports.isAuthenticated = isAuthenticated
+
+const checkIsAuth = auth => {
+  if (!auth.isOk) {
+    throw new _apolloServer.AuthenticationError(_messages.NOT_AUTHENTICATED)
+  }
 }
+
+exports.checkIsAuth = checkIsAuth

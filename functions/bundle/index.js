@@ -1,55 +1,54 @@
-// const { ApolloServer } = require('apollo-server-express')
-const { ApolloServer } = require('apollo-server')
-const { ApolloServer: ApolloServerLambda } = require('apollo-server-lambda')
-const { PrismaClient } = require('@prisma/client')
-// const serverless = require('serverless-http')
-// const express = require('express')
-// const path = require('path')
-// const cors = require('cors')
-require('dotenv').config()
+'use strict'
 
-const schema = require('./schema')
-const { isAuthenticated } = require('./utils/auth')
+Object.defineProperty(exports, '__esModule', {
+  value: true,
+})
+exports.createLocalServer = exports.createLambdaServer = exports.prisma = void 0
 
-// const app = express()
-const prisma = new PrismaClient()
+var _apolloServer = require('apollo-server')
 
-// app.use(cors())
+var _apolloServerLambda = require('apollo-server-lambda')
 
+var _client = require('@prisma/client')
 
-// if (process.env.NODE_ENV !== 'production') {
-//   server.applyMiddleware({ app, path: '/api' })
-// }
+var _graphqlDepthLimit = _interopRequireDefault(require('graphql-depth-limit'))
 
-// server.applyMiddleware({ app, path: '/.netlify/functions/api' })
-// if (process.env.NODE_ENV === 'production') {
-//   app.use('/', express.static(path.join(__dirname, 'client')))
-//
-//   app.get('*', (req, res) => {
-//     res.sendFile(path.resolve(__dirname, 'client', 'index.html'))
-//   })
-// }
+var _dotenv = require('dotenv')
 
-// function start() {
-//
-// }
-//
-// start()
+var _auth = require('./utils/auth')
+
+var _schema = _interopRequireDefault(require('./schema'))
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj }
+}
+
+(0, _dotenv.config)()
+const prisma = new _client.PrismaClient()
+exports.prisma = prisma
 const appolloServerConfig = {
-  schema,
+  schema: _schema.default,
   debug: true,
   playground: true,
   // introspection: true,
+  uploads: {
+    maxFiles: 1,
+    maxFileSize: 10000000, // 10 MB
+
+  },
   engine: {
-    rewriteError: (error) => ({
+    rewriteError: error => ({
       message: error.message,
       state: error.originalError && error.originalError.state,
       locations: error.locations,
       path: error.path,
     }),
   },
-  context: ({ req }) => {
-    const auth = isAuthenticated(req)
+  validationRules: [ (0, _graphqlDepthLimit.default)(5) ],
+  context: ({
+              req,
+            }) => {
+    const auth = (0, _auth.isAuthenticated)(req)
     return {
       auth,
       db: prisma,
@@ -57,15 +56,15 @@ const appolloServerConfig = {
   },
 }
 
-function createLambdaServer() {
-  return new ApolloServerLambda(appolloServerConfig)
-}
+const createLambdaServer = () => new _apolloServerLambda.ApolloServer(appolloServerConfig)
 
-function createLocalServer() {
-  return new ApolloServer(appolloServerConfig)
-}
+exports.createLambdaServer = createLambdaServer
 
-// exports.handler = createLambdaServer().createHandler()
-module.exports = { createLambdaServer, createLocalServer, prisma }
+const createLocalServer = () => new _apolloServer.ApolloServer({
+  ...appolloServerConfig,
+  cors: {
+    origin: '*',
+  },
+})
 
-// module.exports = app
+exports.createLocalServer = createLocalServer
