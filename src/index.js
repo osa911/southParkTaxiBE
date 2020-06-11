@@ -27,7 +27,9 @@ const appolloServerConfig = {
     }),
   },
   validationRules: [depthLimit(5)],
-  context: ({ req }) => {
+  context: ({ req, ...rest }) => {
+    console.log('req> ', req)
+    console.log('rest> ', rest)
     const auth = isAuthenticated(req)
     return {
       auth,
