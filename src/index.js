@@ -11,7 +11,7 @@ export const prisma = new PrismaClient()
 
 const appolloServerConfig = {
   schema,
-  debug: process.env.NODE_ENV === 'development',
+  debug: true, // process.env.NODE_ENV === 'development',
   playground: true,
   // introspection: true,
   uploads: {
@@ -27,9 +27,7 @@ const appolloServerConfig = {
     }),
   },
   validationRules: [depthLimit(5)],
-  context: ({ req, event, ...rest }) => {
-    console.log('req> ', req)
-    console.log('rest> ', rest)
+  context: ({ req, event }) => {
     const auth = isAuthenticated(req || event)
     return {
       auth,
