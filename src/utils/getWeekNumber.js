@@ -17,7 +17,7 @@ Date.prototype.getWeek = function (dowOffset) {
       (this.getTime() -
         newYear.getTime() -
         (this.getTimezoneOffset() - newYear.getTimezoneOffset()) * 60000) /
-      86400000,
+        86400000
     ) + 1
   let weeknum
   //if the year starts before the middle of a week
