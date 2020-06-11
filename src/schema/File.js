@@ -1,11 +1,10 @@
-const graphql = require('graphql')
-const { GraphQLUpload } = require('apollo-server')
-const Excel = require('exceljs/lib/exceljs.nodejs.js')
+import { GraphQLList, GraphQLNonNull } from 'graphql'
+import { GraphQLUpload } from 'apollo-server'
+import Excel from 'exceljs/lib/exceljs.nodejs.js'
+import { getNBUExchangeRate } from '../utils/getNBUExchangeRate'
+import { checkIsAuth } from '../utils/auth'
 
-const { checkIsAuth } = require('../utils/auth')
 const { SheetType } = require('./Types')
-
-const { GraphQLList, GraphQLNonNull } = graphql
 
 const singleUploadStream = {
   description: 'Upload file for reading',
@@ -16,9 +15,11 @@ const singleUploadStream = {
       type: GraphQLNonNull(GraphQLUpload),
     },
   },
-  async resolve(parent, { file }, { auth }) {
+  async resolve(parent, { file }, { db, auth }) {
     checkIsAuth(auth)
     const { createReadStream, filename, mimetype, encoding } = await file
+    const exchangeRate = await getNBUExchangeRate(new Date())
+    console.log('exchangeRate> ', exchangeRate)
     if (mimetype === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
       const stream = createReadStream()
       // read from a stream
@@ -39,6 +40,36 @@ const singleUploadStream = {
           rows.push(cells)
         })
         res.push({ name, rows })
+
+        worksheet.eachColumnKey((col, index) => {
+          console.log('col> ', col)
+          console.log('index> ', index)
+          col.eachCell((cell, rowNumber) => {
+            console.log('cell> ', cell)
+            console.log('rowNumber> ', rowNumber)
+          })
+        })
+
+        // db.report.create({
+        //   data: {
+        //     exchangeRate,
+        //     govNumber,
+        //     govNumberId, // car id
+        //     income,
+        //     incomeBranding,
+        //     managementFee,
+        //     managementFeePercent,
+        //     mileage,
+        //     netProfit,
+        //     netProfitUSD,
+        //     serviceFee,
+        //     title,
+        //     totalIncome,
+        //     trackerFee,
+        //     week,
+        //     year,
+        //   }
+        // })
       })
       return res
     }

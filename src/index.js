@@ -1,4 +1,5 @@
-const { ApolloServer } = require('apollo-server')
+import { ApolloServer } from 'apollo-server'
+
 const { ApolloServer: ApolloServerLambda } = require('apollo-server-lambda')
 const { PrismaClient } = require('@prisma/client')
 const depthLimit = require('graphql-depth-limit')
