@@ -6,6 +6,7 @@ import {
   GraphQLNonNull,
   GraphQLObjectType,
   GraphQLString,
+  GraphQLInt,
 } from 'graphql'
 
 export const RoleEnumType = new GraphQLEnumType({
@@ -53,6 +54,41 @@ export const CarType = new GraphQLObjectType({
     },
     price: { type: GraphQLFloat, description: 'Price of Car.' },
     mileage: { type: GraphQLFloat, description: 'Mileage of Car.' },
+    report: {
+      type: GraphQLList(ReportType),
+      resolve({ id }, args, { db }) {
+        return db.report.findMany({ where: { govNumberId: id } })
+      },
+    },
+  }),
+})
+
+export const ReportType = new GraphQLObjectType({
+  name: 'ReportType',
+  fields: () => ({
+    exchangeRate: { type: GraphQLFloat },
+    govNumber: { type: GraphQLString },
+    govNumberId: { type: GraphQLString },
+    id: { type: GraphQLString },
+    income: { type: GraphQLFloat },
+    incomeBranding: { type: GraphQLFloat },
+    managementFee: { type: GraphQLFloat },
+    managementFeePercent: { type: GraphQLFloat },
+    mileage: { type: GraphQLFloat },
+    netProfit: { type: GraphQLFloat },
+    netProfitUSD: { type: GraphQLFloat },
+    serviceFee: { type: GraphQLFloat },
+    title: { type: GraphQLString },
+    totalIncome: { type: GraphQLFloat },
+    trackerFee: { type: GraphQLFloat },
+    week: { type: GraphQLInt },
+    year: { type: GraphQLInt },
+    car: {
+      type: CarType,
+      resolve({ govNumberId }, args, { db }) {
+        return db.car.findOne({ where: { id: govNumberId } })
+      },
+    },
   }),
 })
 

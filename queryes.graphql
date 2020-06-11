@@ -14,7 +14,7 @@ mutation loginUser {
 }
 
 mutation createUser {
-	createUser(name: "osa1", password: "123123", email: "osa@test.com")
+	createUser(name: "osa911", password: "123123", email: "osa@test.com")
 }
 
 mutation updateUser($id: ID!, $name: String!, $password: String!, $email: String!) {

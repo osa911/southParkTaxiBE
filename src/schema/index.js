@@ -2,6 +2,7 @@ import { GraphQLObjectType, GraphQLSchema } from 'graphql'
 import { Mutation as fileMutation } from './File'
 import { Mutation as userMutation, Query as userQuery } from './User'
 import { Mutation as carMutation, Query as carQuery } from './Car'
+import { Mutation as reportMutation, Query as reportQuery } from './Report'
 
 const Mutation = new GraphQLObjectType({
   name: 'Mutation',
@@ -9,6 +10,7 @@ const Mutation = new GraphQLObjectType({
     ...userMutation,
     ...fileMutation,
     ...carMutation,
+    ...reportMutation,
   },
 })
 
@@ -17,6 +19,7 @@ const Query = new GraphQLObjectType({
   fields: {
     ...userQuery,
     ...carQuery,
+    ...reportQuery,
   },
 })
 

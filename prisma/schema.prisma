@@ -25,19 +25,19 @@ model Report {
   govNumber            String
   govNumberId          String
   id                   String   @default(dbgenerated()) @id
-  income               Float?
-  incomeBranding       Float?
-  managementFee        Float?
+  income               Float? // +
+  incomeBranding       Float? // +
+  managementFee        Float? // +
   managementFeePercent Float?
-  mileage              Float?
-  netProfit            Float?
-  netProfitUSD         Float?
-  serviceFee           Float?
-  title                String?
-  totalIncome          Float?
-  trackerFee           Float?
-  week                 String?
-  year                 String?
+  mileage              Float? // +
+  netProfit            Float? // +
+  netProfitUSD         Float? // +
+  serviceFee           Float? // +
+  title                String? // +
+  totalIncome          Float? // +
+  trackerFee           Float? // +
+  week                 Float? // +
+  year                 Float? // +
   car                  Car      @relation(fields: [govNumberId], references: [id])
 }
 
