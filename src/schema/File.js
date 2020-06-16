@@ -1,5 +1,5 @@
 import { GraphQLList, GraphQLNonNull, GraphQLString } from 'graphql'
-import { GraphQLUpload, UserInputError } from 'apollo-server'
+import { GraphQLUpload, UserInputError, ApolloError } from 'apollo-server'
 import Excel from 'exceljs/lib/exceljs.nodejs.js'
 import { getNBUExchangeRate } from '../utils/getNBUExchangeRate'
 import { getWeekNumber } from '../utils/getWeekNumber'
@@ -81,13 +81,15 @@ const uploadReportFile = {
   async resolve(parent, { file, date = '' }, { db, auth }) {
     checkIsAuth(auth)
     const { createReadStream, filename, mimetype, encoding } = await file
-    const exchangeRate = await getNBUExchangeRate(new Date())
+    const exchangeRate = await getNBUExchangeRate(date || new Date())
+    if (!exchangeRate) throw new Error('Please try again. NBU server was busy.')
     if (mimetype === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
       const stream = createReadStream()
       // read from a stream
       const workbook = new Excel.Workbook()
       await workbook.xlsx.read(stream)
       let res = []
+      let errors = []
 
       for (const worksheet of workbook.worksheets) {
         const { name } = worksheet
@@ -97,7 +99,10 @@ const uploadReportFile = {
           const year = new Date(date).getFullYear()
           const reports = await db.report.findMany({ where: { govNumber: name, week, year } })
           if (reports.length) {
-            throw new UserInputError(`Report for week #${getWeekNumber(date)} - is present in DB`)
+            errors.push(
+              new UserInputError(`Report for week #${getWeekNumber(date)} - is present in DB`)
+            )
+            continue
           }
           let columnForReport
           worksheet.getRow(1).eachCell((cell) => {
@@ -125,23 +130,33 @@ const uploadReportFile = {
             )
             if (!reportedCar) throw new Error('govNumber is not found in DB')
             if (reportedCar) {
+              const {
+                income,
+                incomeBranding,
+                totalIncome,
+                managementFee,
+                mileage,
+                trackerFee,
+                serviceFee,
+                netProfit,
+              } = dbFields
+
               const data = {
                 exchangeRate: roundNumber(exchangeRate),
                 govNumber: name,
                 car: { connect: { id: reportedCar.id } },
-                income: roundNumber(dbFields.income),
-                incomeBranding: roundNumber(dbFields.incomeBranding),
-                managementFee: roundNumber(dbFields.managementFee),
-                managementFeePercent: roundNumber(
-                  (dbFields.managementFee / dbFields.totalIncome) * 100
-                ),
-                mileage: roundNumber(dbFields.mileage),
-                netProfit: roundNumber(dbFields.netProfit),
-                netProfitUSD: roundNumber(dbFields.netProfit / exchangeRate),
-                serviceFee: roundNumber(dbFields.serviceFee),
+                income: roundNumber(income),
+                incomeBranding: roundNumber(incomeBranding),
+                managementFee: roundNumber(managementFee),
+                managementFeePercent: roundNumber((managementFee / totalIncome) * 100),
+                mileage: roundNumber(mileage),
+                netProfit: roundNumber(netProfit),
+                netProfitUSD: roundNumber(netProfit / exchangeRate),
+                serviceFee: roundNumber(serviceFee),
                 title: `Report for week #${week} and year ${year}`,
-                totalIncome: roundNumber(dbFields.totalIncome),
-                trackerFee: roundNumber(dbFields.trackerFee),
+                totalIncome: roundNumber(totalIncome),
+                trackerFee: roundNumber(trackerFee),
+                totalFee: roundNumber(trackerFee + managementFee + serviceFee),
                 week,
                 year,
               }
@@ -151,6 +166,11 @@ const uploadReportFile = {
           }
         }
       }
+
+      if (errors.length) {
+        return errors.map((err) => new ApolloError(err))
+      }
+
       if (res.length) {
         return res
       }

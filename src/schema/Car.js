@@ -4,7 +4,7 @@ import { checkIsAuth } from '../utils/auth'
 
 const getCarById = {
   type: CarType,
-  args: { id: { type: GraphQLID } },
+  args: { id: { type: GraphQLNonNull(GraphQLID) } },
   resolve(parent, { id }, { db, auth }) {
     checkIsAuth(auth)
     return db.car.findOne({ where: { id } })

@@ -16,7 +16,7 @@ model Car {
   price     Float?
   title     String
   user      User     @relation(fields: [ownerId], references: [id])
-  report    Report[]
+  reports   Report[]
 }
 
 model Report {
@@ -35,10 +35,16 @@ model Report {
   serviceFee           Float? // +
   title                String? // +
   totalIncome          Float? // +
+  totalFee             Float? // +
   trackerFee           Float? // +
   week                 Float? // +
   year                 Float? // +
   car                  Car      @relation(fields: [govNumberId], references: [id])
+}
+
+enum role_enum {
+  ADMIN
+  INVESTOR
 }
 
 model User {
@@ -52,7 +58,3 @@ model User {
   cars      Car[]
 }
 
-enum role_enum {
-  ADMIN
-  INVESTOR
-}

@@ -54,7 +54,7 @@ export const CarType = new GraphQLObjectType({
     },
     price: { type: GraphQLFloat, description: 'Price of Car.' },
     mileage: { type: GraphQLFloat, description: 'Mileage of Car.' },
-    report: {
+    reports: {
       type: GraphQLList(ReportType),
       resolve({ id }, args, { db }) {
         return db.report.findMany({ where: { govNumberId: id } })
@@ -80,6 +80,7 @@ export const ReportType = new GraphQLObjectType({
     serviceFee: { type: GraphQLFloat },
     title: { type: GraphQLString },
     totalIncome: { type: GraphQLFloat },
+    totalFee: { type: GraphQLFloat },
     trackerFee: { type: GraphQLFloat },
     week: { type: GraphQLFloat },
     year: { type: GraphQLFloat },

@@ -23,6 +23,12 @@ create table "public"."Car" (
   mileage numeric
 );
 
+--ALTER TABLE "public"."Report"
+--ADD COLUMN "totalFee" numeric(10, 2);
+
+--ALTER TABLE "public"."Report"
+--DROP COLUMN totalFee;
+
 create table "public"."Report" (
   id uuid default uuid_generate_v4() primary key not null,
   "createdAt" timestamp not null default now(),
@@ -38,6 +44,7 @@ create table "public"."Report" (
   "govNumberId" uuid not null,
   foreign key ("govNumberId") references "public"."Car"(id),
   "totalIncome" numeric(10, 2),
+  "totalFee" numeric(10, 2),
   "managementFeePercent" numeric(10, 2),
   "managementFee" numeric(10, 2),
   "netProfit" numeric(10, 2),
