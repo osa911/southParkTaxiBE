@@ -82,7 +82,7 @@ const uploadReportFile = {
     checkIsAuth(auth)
     const { createReadStream, filename, mimetype, encoding } = await file
     const exchangeRate = await getNBUExchangeRate(date || new Date())
-    if (!exchangeRate) throw new Error('Please try again. NBU server was busy.')
+    if (!exchangeRate) throw new Error('Попробуйте еще раз. Сервер НБУ не отвечает.')
     if (mimetype === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
       const stream = createReadStream()
       // read from a stream
@@ -100,7 +100,7 @@ const uploadReportFile = {
           const reports = await db.report.findMany({ where: { govNumber: name, week, year } })
           if (reports.length) {
             errors.push(
-              new UserInputError(`Report for week #${getWeekNumber(date)} - is present in DB`)
+              new UserInputError(`Отчет за неделю #${getWeekNumber(date)} - уже существует!`)
             )
             continue
           }
@@ -128,7 +128,7 @@ const uploadReportFile = {
               }),
               {}
             )
-            if (!reportedCar) throw new Error('govNumber is not found in DB')
+            if (!reportedCar) throw new Error('Автомобиль не найдет в системе!')
             if (reportedCar) {
               const {
                 income,
@@ -153,7 +153,7 @@ const uploadReportFile = {
                 netProfit: roundNumber(netProfit),
                 netProfitUSD: roundNumber(netProfit / exchangeRate),
                 serviceFee: roundNumber(serviceFee),
-                title: `Report for week #${week} and year ${year}`,
+                title: `Отчет за неделю #${week}/${year}`,
                 totalIncome: roundNumber(totalIncome),
                 trackerFee: roundNumber(trackerFee),
                 totalFee: roundNumber(trackerFee + managementFee + serviceFee),
@@ -176,7 +176,7 @@ const uploadReportFile = {
       }
       return new Error('Upload for data range impossible')
     }
-    throw new Error('File should be .xlsx')
+    throw new Error('Файл должен быть .xlsx')
   },
 }
 
