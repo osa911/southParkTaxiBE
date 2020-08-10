@@ -10,8 +10,9 @@ export const getNBUExchangeRate = async (date) => {
     const d = `${day}`.length === 1 ? `0${day}` : `${day}`
     const response = await fetch(
       `https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?valcode=USD&date=${y}${m}${d}&json`
-    ).then((res) => res.json())
-    if (Array.isArray(response) && response.length > 0) return response[0].rate
+    )
+    const json = await response.json()
+    if (Array.isArray(json) && json.length > 0) return json[0].rate
   } catch {
     return null
   }
