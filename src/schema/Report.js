@@ -2,6 +2,7 @@ import { GraphQLID, GraphQLList, GraphQLNonNull, GraphQLString } from 'graphql'
 import { ReportType } from './Types'
 import { checkIsAuth } from '../utils/auth'
 import { getWeekNumber } from '../utils/getWeekNumber'
+import { dbDeleteError } from '../utils/dbDeleteError'
 
 const getReportById = {
   type: ReportType,
@@ -44,11 +45,16 @@ const getReportsList = {
 }
 
 const deleteReport = {
-  type: ReportType,
-  args: { id: { type: GraphQLID } },
-  resolve(parent, { id }, { db, auth }) {
+  type: GraphQLString,
+  args: { id: { type: GraphQLString } },
+  async resolve(parent, { id }, { db, auth }) {
     checkIsAuth(auth)
-    return db.report.delete({ where: { id } })
+    try {
+      await db.report.delete({ where: { id } })
+      return 'ok'
+    } catch (e) {
+      return dbDeleteError(e)
+    }
   },
 }
 

@@ -6,6 +6,7 @@ import { WRONG_AUTH_CREDENTIAL } from '../constants/messages'
 import { checkIsAuth } from '../utils/auth'
 import { ValidationError } from '../utils/validationError'
 import { RoleEnumType, UserType } from './Types'
+import { dbDeleteError } from '../utils/dbDeleteError'
 
 const getUserById = {
   type: UserType,
@@ -81,11 +82,16 @@ const updateUser = {
 
 // TODO: add cascading cars deleting
 const deleteUser = {
-  type: UserType,
-  args: { id: { type: GraphQLID } },
-  resolve(parent, { id }, { db, auth }) {
+  type: GraphQLString,
+  args: { id: { type: GraphQLString } },
+  async resolve(parent, { id }, { db, auth }) {
     checkIsAuth(auth)
-    return db.user.delete({ where: { id } })
+    try {
+      await db.user.delete({ where: { id } })
+      return 'ok'
+    } catch (e) {
+      return dbDeleteError(e)
+    }
   },
 }
 

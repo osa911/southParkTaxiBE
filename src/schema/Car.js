@@ -1,6 +1,7 @@
 import { GraphQLFloat, GraphQLID, GraphQLList, GraphQLNonNull, GraphQLString } from 'graphql'
 import { CarType } from './Types'
 import { checkIsAuth } from '../utils/auth'
+import { dbDeleteError } from '../utils/dbDeleteError'
 
 const getCarById = {
   type: CarType,
@@ -62,11 +63,16 @@ const updateCar = {
 }
 
 const deleteCar = {
-  type: CarType,
-  args: { id: { type: GraphQLID } },
-  resolve(parent, { id }, { db, auth }) {
+  type: GraphQLString,
+  args: { id: { type: GraphQLString } },
+  async resolve(parent, { id }, { db, auth }) {
     checkIsAuth(auth)
-    return db.car.delete({ where: { id } })
+    try {
+      await db.car.delete({ where: { id } })
+      return 'ok'
+    } catch (e) {
+      return dbDeleteError(e)
+    }
   },
 }
 
