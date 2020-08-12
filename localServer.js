@@ -6,7 +6,9 @@ const PORT = process.env.SERVER_PORT || 5000
 try {
   prisma.connect()
   console.log('DB CONNECTED')
-  server.listen({ port: PORT }).then(({ url }) => console.log(`🚀 🚀 🚀 Server has been started on ${url} ❤️ ❤️ ❤️ `))
+  server
+    .listen({ port: PORT })
+    .then(({ url }) => console.log(`🚀 🚀 🚀 Server has been started on ${url} ❤️ ❤️ ❤️ `))
 } catch (e) {
   console.log('Server Error', e.message)
   prisma.disconnect()

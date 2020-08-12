@@ -12,6 +12,9 @@
     "pretty:fix": "prettier --write 'src/**/*.{js,jsx}'",
     "prisma": "npx prisma generate",
     "prismai": "npx prisma introspect",
+    "up": "docker-compose up --detach",
+    "down": "docker-compose down",
+    "connect": "docker exec -i -t $(docker ps -q) bash",
     "prismam": "npx prisma migrate save --name init --experimental && npx prisma migrate up --experimental"
   },
   "main": "index.js",

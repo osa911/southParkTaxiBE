@@ -1,0 +1,16 @@
+version: "3.6"
+
+services:
+  api:
+    env_file:
+      - .env
+    container_name: southPark-api
+    build: ./
+    ports:
+      - 5085:5085
+    volumes:
+      - .:/app
+      - node_modules:/app/node_modules
+
+volumes:
+  node_modules:
