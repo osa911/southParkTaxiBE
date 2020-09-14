@@ -10,7 +10,7 @@ try {
     .listen({ port: PORT })
     .then(({ url }) => console.log(`🚀 🚀 🚀 Server has been started on ${url} ❤️ ❤️ ❤️ `))
 } catch (e) {
-  console.log('Server Error', e.message)
+  console.log('Server Error :', e.message)
   prisma.disconnect()
   process.exit(1)
 }
